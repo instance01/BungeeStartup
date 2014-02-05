@@ -41,7 +41,7 @@ public class Main extends Plugin {
 			}
 		}, 7L, TimeUnit.SECONDS);
 		
-		listProcesses();
+		listProcesses(false);
     }
 	
 	
@@ -81,10 +81,14 @@ public class Main extends Plugin {
 	}
 
 	
-	public void listProcesses(){
+	public void listProcesses(boolean all){
 		Process p__ = null;
 		try {
-			p__ = Runtime.getRuntime().exec("ps");
+			if(all){
+				p__ = Runtime.getRuntime().exec("ps -A");
+			}else{
+				p__ = Runtime.getRuntime().exec("ps");
+			}
 		} catch (IOException e) {
 			
 		}

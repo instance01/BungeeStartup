@@ -1,0 +1,5 @@
+name: ExBungee
+version: 1.0
+author: InstanceLabs
+
+main: com.comze_instancelabs.executeshbungee.Main

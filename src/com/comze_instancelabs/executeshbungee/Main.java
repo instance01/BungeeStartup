@@ -4,6 +4,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.attribute.PosixFilePermission;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import net.md_5.bungee.api.ProxyServer;
@@ -68,15 +73,36 @@ public class Main extends Plugin {
 		File dir = new File(System.getProperty("user.dir"));
 		String parentpath = dir.getParent();
 		
+		File dir_ = new File(".");
+		File parent = dir_.getParentFile();
+		
+		Set<PosixFilePermission> perms = new HashSet<PosixFilePermission>();
+
+        perms.add(PosixFilePermission.OWNER_READ);
+        perms.add(PosixFilePermission.OWNER_WRITE);
+        perms.add(PosixFilePermission.OWNER_EXECUTE);
+
+        perms.add(PosixFilePermission.GROUP_READ);
+        perms.add(PosixFilePermission.GROUP_WRITE);
+        perms.add(PosixFilePermission.GROUP_EXECUTE);
+
+        perms.add(PosixFilePermission.OTHERS_READ);
+        perms.add(PosixFilePermission.OTHERS_WRITE);
+        perms.add(PosixFilePermission.OTHERS_EXECUTE);
+        
 		try{
-			File f1 = new File("start.sh");
+			File f1 = new File(dir.getParentFile(), "start.sh");
 			f1.setExecutable(true);
-			File f2 = new File("start2.sh");
+			Files.setPosixFilePermissions(Paths.get(f1.getAbsolutePath()), perms);
+			File f2 = new File(dir.getParentFile(), "start2.sh");
 			f2.setExecutable(true);
-			File f3 = new File("start3.sh");
+			Files.setPosixFilePermissions(Paths.get(f2.getAbsolutePath()), perms);
+			File f3 = new File(dir.getParentFile(), "start3.sh");
 			f3.setExecutable(true);
+			Files.setPosixFilePermissions(Paths.get(f3.getAbsolutePath()), perms);
 		}catch(Exception e){
 			ProxyServer.getInstance().getLogger().info("Failed to fix File permissions.");
+			e.printStackTrace();
 		}
 	}
 
